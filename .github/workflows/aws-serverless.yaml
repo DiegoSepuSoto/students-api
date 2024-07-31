@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: install serverless cli globally
-        run: npm install -g serverless
+        run: npm install -g serverless@3.39.0
       - name: cache node modules
         id: cache-nodemodules
         uses: actions/cache@v2
