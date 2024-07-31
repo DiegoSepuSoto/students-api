@@ -18,7 +18,3 @@ functions:
       - http:
           method: ANY
           path: '{proxy+}'
-
-package:
-  patterns:
-    - '!node_modules/**'
