@@ -12,7 +12,7 @@ jobs:
       - name: install dependencies and generate docs
         run: |
           npm install @openapitools/openapi-generator-cli -g
-          npx @openapitools/openapi-generator-cli generate -i openapi.yaml -g html -o ./docs
+          npx @openapitools/openapi-generator-cli generate -i openapi.yaml -g html2 -o ./docs
 
       - name: deploy to github pages
         uses: JamesIves/github-pages-deploy-action@v4
