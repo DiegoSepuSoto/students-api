@@ -1,0 +1,20 @@
+name: Deploy documentation
+on: [ push ]
+permissions:
+  contents: write
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: install dependencies and generate docs
+        run: |
+          npm install @openapitools/openapi-generator-cli -g
+          npx @openapitools/openapi-generator-cli generate -i openapi.yaml -g html -o /docs
+
+      - name: deploy to github pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: docs

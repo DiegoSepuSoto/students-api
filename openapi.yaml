@@ -1,0 +1,179 @@
+openapi: 3.0.0
+paths:
+  /student/{id}:
+    get:
+      operationId: StudentController_findOne
+      summary: Get an student based on their unique id (uuid v4)
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Student found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "204":
+          description: Requested student not found
+        "500":
+          description: Internal server error
+    delete:
+      operationId: StudentController_remove
+      summary: Deletes a student in the database (soft delete)
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Student removed
+        "500":
+          description: Internal server error
+  /student/name/{name}:
+    get:
+      operationId: StudentController_findByName
+      summary: Get an array of students from a name search (both first and last name)
+      parameters:
+        - name: name
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Students found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Student"
+        "204":
+          description: No students found
+        "500":
+          description: Internal server error
+  /student:
+    post:
+      operationId: StudentController_create
+      summary: Store a new student in the database from the request information
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateStudentDTO"
+      responses:
+        "201":
+          description: Student stored
+        "400":
+          description: the request must follow the required parameters
+        "500":
+          description: Internal server error
+info:
+  title: Students API
+  description: API that provides the information for a future Students Dashboard
+  version: "0.1"
+  contact: {}
+tags: []
+servers: []
+components:
+  schemas:
+    Student:
+      type: object
+      properties:
+        id:
+          type: string
+          example: b4c565c2-4646-4400-8ab5-f007684c51b4
+          description: Student's unique id
+        fullName:
+          type: string
+          example: John Doe
+          description: First name and last name of the student
+        birthday:
+          type: string
+          example: 1 de enero
+          description: Student's birthday (spanish readable)
+        email:
+          type: string
+          example: john@doe.com
+          description: Student's email
+        whatsappLink:
+          type: string
+          example: https://wa.me/+1234567890
+          description: Link for direct message through whatsapp to student
+        address:
+          type: string
+          example: 742 Evergreen Terrace, Springfield, IL, 62704, USA
+          description: Student's full address
+        numberOfCourses:
+          type: number
+          example: 4
+          description: Student's number of enrolled courses
+      required:
+        - id
+        - fullName
+        - birthday
+        - email
+        - whatsappLink
+        - address
+        - numberOfCourses
+    CreateStudentDTO:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+          description: Student's name
+        lastName:
+          type: string
+          example: Doe
+          description: Student's last name
+        dateOfBirth:
+          type: string
+          example: 2003-01-23
+          description: "Student's date of birth (with format: YYYY-MM-DD):"
+        gender:
+          type: string
+          example: Female
+          description: Student's gender
+        email:
+          type: string
+          example: john@doe.com
+          description: Student's email
+        phone:
+          type: string
+          example: "+12334567890"
+          description: Student's phone
+        address:
+          type: string
+          example: 742 Evergreen Terrace, Springfield, IL, 62704, USA
+          description: Student's address
+        enrollmentDate:
+          type: string
+          example: 2024-08-04
+          description: Enrollment date of the student in the school/institute
+        courses:
+          example:
+            - MATH101
+            - BIOL102
+          description: Courses that the student is enrolled
+          type: array
+          items:
+            type: string
+      required:
+        - firstName
+        - lastName
+        - dateOfBirth
+        - gender
+        - email
+        - phone
+        - address
+        - enrollmentDate
+        - courses
