@@ -1,73 +1,76 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Students API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This service will be used for a future/possible dashboards of school students, which information will be stored
+in a DynamoDB database and served through a serverless API thanks to AWS.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Technologies
 
-## Description
+- This API was developed using base features of the NestJS framework
+- The database used was DynamoDB
+- The flow of deployment was backed up by Github Actions
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Database schema
 
-## Installation
+Here's an example of the data being stored in the database:
 
-```bash
-$ npm install
+```json
+{
+  "id": "d1a043ed-7891-4a5c-a093-81b3270df86f",
+  "address": "123 Maple St, Springfield, IL, 62704, USA",
+  "courses": [
+    "CSE201",
+    "ENG101",
+    "HIS202"
+  ],
+  "createdAt": "2024/08/04 20:38:45",
+  "dateOfBirth": "1998-03-22",
+  "email": "alice.johnson@example.com",
+  "enrollmentDate": "2019-08-20",
+  "firstName": "Alice",
+  "gender": "Female",
+  "isDeleted": false,
+  "lastName": "Johnson",
+  "phone": "+1234567890",
+  "updatedAt": "2024/08/04 20:38:45"
+}
 ```
 
-## Running the app
+## API Usage
+
+There are four endpoints available:
+
+- Get student by ID
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+curl --location 'http://localhost:3000/student/abc123'
 ```
 
-## Test
+- Get students by name/last name match
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+curl --location 'http://localhost:3000/student/name/john'
 ```
 
-## Support
+- Add new student to database
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+curl --location 'http://localhost:3000/student' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+"firstName": "Charlie",
+"lastName": "Davis",
+"dateOfBirth": "1999-12-10",
+"gender": "Non-binary",
+"email": "charlie.davis@example.com",
+"phone": "+1098765432",
+"address": "789 Pine St, Lakeside, TX, 76102, USA",
+"enrollmentDate": "2021-01-15",
+"courses": ["ART101", "MUS101", "ENG201"]
+}'
+```
 
-## Stay in touch
+- Delete (soft delete) a student
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+```bash
+curl --location --request DELETE 'http://localhost:3000/student/12345'
+```
