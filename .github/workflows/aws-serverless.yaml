@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [ 20.x ]
     steps:
       - uses: actions/checkout@v2
       - name: Setup node.js - ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - name: install serverless cli globally
+      - name: install serverless cli
         run: npm install -g serverless@3.39.0
       - name: cache node modules
         id: cache-nodemodules
